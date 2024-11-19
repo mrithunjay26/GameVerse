@@ -74,7 +74,7 @@ export default function GamePage() {
                 <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl w-full max-w-4xl aspect-video">
                     <iframe
                         ref={iframeRef}
-                        src="https://html5.gamedistribution.com/6493b872f0564380a7adad671d1e0a57/?gd_sdk_referrer_url=https://www.onlinegames.io/time-shooter-3-swat/" // Replace with actual game URL
+                        src="https://games-5zw4.onrender.com/timeshooter.html" // Replace with actual game URL
                         className="w-full h-full"
                         allowFullScreen
                     ></iframe>
