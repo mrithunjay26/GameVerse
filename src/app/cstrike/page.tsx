@@ -74,7 +74,7 @@ export default function GamePage() {
                 <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl w-full max-w-4xl aspect-video">
                     <iframe
                         ref={iframeRef}
-                        src="https://www.onlinegames.io/games/2023/unity2/guerrillas-io/index.html" // Replace with actual game URL
+                        src="https://games-5zw4.onrender.com/" // Replace with actual game URL
                         className="w-full h-full"
                         allowFullScreen
                     ></iframe>
