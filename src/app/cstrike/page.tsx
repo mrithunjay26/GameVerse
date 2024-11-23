@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { Maximize2, Minimize2, Volume2, VolumeX, ChevronLeft } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { Maximize2, Minimize2, Volume2, VolumeX, ChevronLeft } from 'lucide-react';
 
 const glowingOrbVariants = {
     animate: {
@@ -12,35 +12,42 @@ const glowingOrbVariants = {
         transition: {
             duration: 3,
             repeat: Infinity,
-            ease: "easeInOut"
-        }
-    }
-}
+            ease: 'easeInOut',
+        },
+    },
+};
 
 export default function GamePage() {
-    const [isFullScreen, setIsFullScreen] = useState(false)
-    const [isMuted, setIsMuted] = useState(false)
-    const iframeRef = useRef<HTMLIFrameElement>(null)
+    const [isFullScreen, setIsFullScreen] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
     const toggleFullScreen = () => {
-        if (!document.fullscreenElement) {
-            if (iframeRef.current && iframeRef.current.requestFullscreen) {
-                iframeRef.current.requestFullscreen()
+        if (iframeRef.current) {
+            // TypeScript knows iframeRef.current is not null here
+            const iframe = iframeRef.current as HTMLIFrameElement;
+            if (!document.fullscreenElement) {
+                iframe.requestFullscreen().catch((error) => {
+                    console.error("Error attempting to enter fullscreen:", error);
+                });
+            } else {
+                document.exitFullscreen();
             }
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen()
-            }
+            console.error("Iframe reference is null.");
         }
-    }
+    };
 
     useEffect(() => {
         const handleFullScreenChange = () => {
-            setIsFullScreen(!!document.fullscreenElement)
-        }
-        document.addEventListener('fullscreenchange', handleFullScreenChange)
-        return () => document.removeEventListener('fullscreenchange', handleFullScreenChange)
-    }, [])
+            setIsFullScreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', handleFullScreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    }, []);
+
+    // Use the actual game URL here
+    const gameUrl = 'https://shorturl.at/bpSCV'; // The URL you want to proxy and load inside the iframe
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white overflow-hidden">
@@ -74,7 +81,7 @@ export default function GamePage() {
                 <div className="relative bg-black rounded-lg overflow-hidden shadow-2xl w-full max-w-4xl aspect-video">
                     <iframe
                         ref={iframeRef}
-                        src="https://shorturl.at/bpSCV" // Replace with actual game URL
+                        src={gameUrl} // Directly load the game URL here
                         className="w-full h-full"
                         allowFullScreen
                     ></iframe>
@@ -85,14 +92,14 @@ export default function GamePage() {
                             <button
                                 onClick={() => setIsMuted(!isMuted)}
                                 className="text-white hover:text-purple-400 transition-colors"
-                                aria-label={isMuted ? "Unmute" : "Mute"}
+                                aria-label={isMuted ? 'Unmute' : 'Mute'}
                             >
                                 {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                             </button>
                             <button
                                 onClick={toggleFullScreen}
                                 className="text-white hover:text-purple-400 transition-colors"
-                                aria-label={isFullScreen ? "Exit full screen" : "Enter full screen"}
+                                aria-label={isFullScreen ? 'Exit full screen' : 'Enter full screen'}
                             >
                                 {isFullScreen ? <Minimize2 size={24} /> : <Maximize2 size={24} />}
                             </button>
@@ -104,7 +111,8 @@ export default function GamePage() {
                 <div className="mt-8 w-full max-w-4xl bg-white/5 backdrop-blur-md rounded-lg p-6">
                     <h2 className="text-2xl font-bold mb-4">About the Game</h2>
                     <p className="text-gray-300 mb-4">
-                        series of multiplayer tactical first-person shooter video games in which teams of terrorists battle to perpetrate an act of terror.                    </p>
+                        series of multiplayer tactical first-person shooter video games in which teams of terrorists battle to perpetrate an act of terror.
+                    </p>
                     <div className="flex justify-between items-center">
                         <div>
                             <span className="text-purple-400 font-semibold">Genre:</span> Action
@@ -116,5 +124,5 @@ export default function GamePage() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
